@@ -34,12 +34,6 @@ def RunSendpy():
     Send_cmd_reculsive = [sys.executable, Send_cmd, '-u', 'python3']
     global pS
     pS = subprocess.Popen(Send_cmd_reculsive)#, stdout=subprocess.PIPE, universal_newlines=True, text=True)
-
-def RunHuskypy():
-    Husky_cmd = "/home/pi/Desktop/FINAL/Husky.py"
-    Husky_cmd_reculsive = [sys.executable, Husky_cmd, '-u', 'python3']  
-    global pH
-    pH = subprocess.Popen(Husky_cmd_reculsive)#, stdout=subprocess.PIPE, universal_newlines=True, text=True)
     
 def RunSensingpy():
     Sensor_cmd = "/home/pi/Desktop/FINAL/Sensing.py"
@@ -54,27 +48,9 @@ def RunQRpy():
     pQ = subprocess.Popen(QR_cmd_reculsive)#,stdout=subprocess.PIPE, universal_newlines=True, text=True)#, encoding='UTF-8')
     time.sleep(2)
 
-def RunGyropy():
-    Gyro_cmd = "/home/pi/Desktop/FINAL/Gyro.py"
-    Gyro_cmd_reculsive = [sys.executable, Gyro_cmd, '-u', 'python3']
-    global p
-    p = subprocess.Popen(Gyro_cmd_reculsive,stdout=subprocess.PIPE, universal_newlines=True, text=True)
-    time.sleep(2)
-
-def RunGyropy11():
-    Gyro_cmd11 = "/home/pi/Desktop/FINAL/Gyro.py"
-    Gyro_cmd_reculsive11 = [sys.executable, Gyro_cmd11, '-u', 'python3']
-    global p11
-    p11 = subprocess.Popen(Gyro_cmd_reculsive11,stdout=subprocess.PIPE, universal_newlines=True, text=True)
-    time.sleep(2)
-
 def KillSendpy():
     pS.kill()
     pS.terminate()
-
-def KillHuskypy():
-    pH.kill()
-    pH.terminate()
 
 def KillSensingpy():
     pSS.kill()
@@ -119,26 +95,6 @@ def setactuator():
     
     with open('/home/pi/Desktop/FINAL/status.pickle', 'wb') as f:
         pickle.dump(status, f)
-
-def M1forward():
-    MotorR.forward(14)
-    MotorL.forward(14)#12.62
-
-def MMforward(SS):
-    MotorR.forward(SS)
-    MotorL.forward(SS+0.6)
-
-def RRturn(SS):
-    MotorR.backward(SS)#16
-    MotorL.forward(SS)
-    
-def LLturn(SS):
-    MotorR.forward(SS)
-    MotorL.backward(SS)
-
-def Mbrake():
-    MotorL.brake()
-    MotorR.brake()
 
 def Getweb():
     # 서버 경로값을 저장하는 파일이 별도로 있지만
