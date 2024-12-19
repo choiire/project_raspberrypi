@@ -81,10 +81,12 @@ if __name__ == '__main__':
     while 1:
         data = Getstatus()#루트 갱신
         time.sleep(0.01)
-        Pump(data["pump"])
-        time.sleep(0.01)
-        Solenoid(data["solenoid"])
-        time.sleep(0.01)
-        Fan(data["fan"])
+        if (int(data["fire"]) == 1) & (int(data["sonic"]) < 10):
+            Pump(1)
+            time.sleep(0.01)
+            Solenoid(1)
+            time.sleep(0.01)
+        if (int(data["co2"]) == 1):
+            Fan(1)
         time.sleep(0.01)
     #KillReceivepy()
