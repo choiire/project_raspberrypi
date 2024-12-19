@@ -86,7 +86,7 @@ if __name__ == '__main__':
             time.sleep(0.01)
             Solenoid(1)
             time.sleep(0.01)
-        if (int(data["co2"]) == 1):
+        if (int(data["co2"]) == 5000):
             Fan(1)
         time.sleep(0.01)
     #KillReceivepy()
