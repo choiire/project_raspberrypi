@@ -1,16 +1,9 @@
 import RPi.GPIO as GPIO
-import time, pickle, RPi_I2C_driver, json
+import time, pickle, json, sys, subprocess, requests
 import numpy as np
 
-mylcd = RPi_I2C_driver.lcd(0x3f)
+sensor_data = {"sonic": "20", "fire":"0", "co2":""}
 
-sensor_data = {"vol": "25", "sonic": "20", "qr":"00", "husky":"", "lift":"0", "box":"10"}
-"""
-Data = "00"
-with open('qr.pickle', 'wb') as f:
-    pickle.dump(Data, f)"""
-#with open('lift.pickle', 'wb') as f:
-#    pickle.dump(0, f)
 #sonic
 TRIG = 21
 ECHO = 20
@@ -42,17 +35,54 @@ def sonic():
     distance = int(duration * 17000)
     sensor_data["sonic"] = distance
 
-while 1:
-    sonic()
-    time.sleep(0.1)
-    try:
-        with open('/home/pi/Desktop/FINAL/status.pickle', 'rb') as f:
-            status = pickle.load(f)
-            sensor_data['lift'] = status["lift"]
-            sensor_data['box'] = status["box"]
-        with open('/home/pi/Desktop/FINAL/sensor.pickle', 'wb') as f:
-            pickle.dump(sensor_data, f)
-    except EOFError:
+def fire():
+
+    sensor_data["fire"] = 0
+
+def co2():
+
+    sensor_data["co2"] = 0
+
+def RunSendpy():
+    Send_cmd = "/home/pi/SEND.py"
+    Send_cmd_reculsive = [sys.executable, Send_cmd, '-u', 'python3']
+    global pS
+    pS = subprocess.Popen(Send_cmd_reculsive)  # , stdout=subprocess.PIPE, universal_newlines=True, text=True)
+
+def RunQRpy():
+    QR_cmd = "/home/pi//QR.py"
+    QR_cmd_reculsive = [sys.executable, QR_cmd, '-u', 'python3']
+    global pQ
+    pQ = subprocess.Popen(
+        QR_cmd_reculsive)  # ,stdout=subprocess.PIPE, universal_newlines=True, text=True)#, encoding='UTF-8')
+    time.sleep(2)
+
+def KillSendpy():
+    pS.kill()
+    pS.terminate()
+
+def KillQRpy():
+    pQ.kill()
+    pQ.terminate()
+
+if __name__ == '__main__':
+
+    RunSendpy()  # 통신 시작
+    RunQRpy()
+    while 1:
+
+        sonic()
+        time.sleep(0.1)
+        fire()
+        time.sleep(0.1)
+        co2()
+        time.sleep(0.1)
+
+        try:
+            with open('/home/pi/sensor.pickle', 'wb') as f:
+                pickle.dump(sensor_data, f)
+        except EOFError:
             pass
-        
-    #print(sensor_data)
+
+    KillSendpy()
+    KillQRpy()
