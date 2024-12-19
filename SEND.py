@@ -11,7 +11,6 @@ async def sensors_post():
                 sensor_data = pickle.load(f)
             except EOFError:
                 pass
-        #센서값 전송
         try:
             async with session.post((app_url+'post'), json=json.dumps(sensor_data)) as resp:
                 #print(resp.status)
