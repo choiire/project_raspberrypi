@@ -2,7 +2,7 @@ import json, time, requests, asyncio, uvloop, aiohttp, pickle
 from flask import Flask, json, jsonify, request, abort, make_response, render_template
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
-app_url = 'https://smartporter.herokuapp.com/'
+app_url = 'https://pi147-1d4b25580c95.herokuapp.com/'
 
 async def sensors_post():
     async with aiohttp.ClientSession() as session:
